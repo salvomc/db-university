@@ -1,0 +1,78 @@
+
+QUERY n.1
+
+SELECT COUNT(*) AS `n_students`, YEAR(`enrolment_date`) 
+FROM `students`
+GROUP BY YEAR(`enrolment_date`)
+ORDER BY `n_students` DESC;
+
+QUERY n.2
+
+SELECT count(*) as `n_teachers`, `office_address` 
+FROM `teachers` 
+GROUP BY `office_address` 
+ORDER BY `n_teachers` DESC;
+
+QUERY n.3
+
+SELECT `exams`.`id` as `id_esame`, AVG(`exam_student`.`vote`) as `voto_medio` 
+FROM `exams` 
+JOIN `exam_student` ON `exams`.`id` = `exam_student`.`exam_id` 
+GROUP BY `exams`.`id`  
+ORDER BY `voto_medio` DESC;
+
+QUERY n.4
+
+SELECT `departments`.`name` as `nome_dipartimento`, COUNT(`degrees`.`id`) as `numero_corsi_laurea` 
+FROM `departments` 
+JOIN `degrees` ON `departments`.`id` = `degrees`.`department_id` 
+GROUP BY `departments`.`id`;
+
+QUERY n.5
+
+SELECT  `degrees`.`name` as `corso_di_laurea`, COUNT(`students`.`id`) AS `numero_studenti`
+FROM `degrees`
+JOIN `students` ON `degrees`.`id` = `students`.`degree_id`
+WHERE `degrees`.`name` LIKE 'Corso di Laurea in Economia';
+
+QUERY n.6
+
+SELECT `departments`.`name` AS `nome_dipartimento`, `degrees`.`name` AS `nome_corso_laurea`, `degrees`.`level` AS `livello_corso` 
+FROM `departments` 
+JOIN `degrees` ON `departments`.`id` = `degrees`.`department_id` 
+WHERE `degrees`.`level` LIKE 'magistrale' 
+AND `departments`.`name` LIKE 'Dipartimento di Neuroscienze';
+
+QUERY n.7
+
+SELECT `courses`.`name` as `nome_corso`, `teachers`.`name` as `nome_docente`, `teachers`.`surname`as `cognome_docente`
+FROM `courses`
+JOIN `course_teacher` ON `courses`.`id` = `course_teacher`.`course_id`
+JOIN `teachers` ON `course_teacher`.`teacher_id` = `teachers`.`id`
+WHERE `teacher_id` = 44;
+
+QUERY n.8
+
+SELECT `students`.`name` as `nome_studente`, `students`.`surname` as `cognome_studente`, `degrees`.`name` as `corso_laurea`, `departments`.`name` as `nome_dipartimento`
+FROM `students`
+JOIN `degrees` ON `students`.`degree_id`= `degrees`.`id`
+JOIN `departments` ON `degrees`.`department_id`=`departments`.`id`
+ORDER BY `students`.`name`,`students`.`surname`;
+
+QUERY n.9
+
+SELECT `departments`.`name` as `nome_dipartimento`, `courses`.`name` as `nome_corso`, `teachers`.`name` as `nome_docente`, `teachers`.`surname` as `cognome_docente`  
+FROM `degrees`
+JOIN `courses` ON `degrees`.`id` = `courses`.`degree_id`
+JOIN `course_teacher` on `courses`.`id` = `course_teacher`.`course_id`
+JOIN `teachers` on `course_teacher`.`teacher_id`=`teachers`.`id`
+JOIN `departments` on `degrees`.`department_id`=`departments`.`id`;
+
+QUERY n.10
+
+SELECT DISTINCT `departments`.`name` as `nome_dipartimento`, `teachers`.`name` as `nome_docente`, `teachers`.`surname` as `cognome_docente`
+FROM `departments`
+JOIN `degrees` ON `departments`.`id` = `degrees`.`department_id`
+JOIN `courses` ON `degrees`.`id` = `courses`.`degree_id`
+JOIN `course_teacher` ON `courses`.`id`=`course_teacher`.`course_id`
+JOIN `teachers` ON `course_teacher`.`teacher_id`=`teachers`.`id`
